@@ -28,22 +28,24 @@ const hide = (elem) => {
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
 
-const getNotes = () =>
+const getNotes = (note) =>
   fetch('/api/notes', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    body: JSON.stringify(note),
   });
 
 const saveNote = (note) =>
   fetch('/api/notes', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify(note)
+    body: JSON.stringify(note),
   });
+
 
 const deleteNote = (id) =>
   fetch(`/api/notes/${id}`, {
@@ -131,7 +133,7 @@ const handleRenderBtns = () => {
 const renderNoteList = async (notes) => {
   let jsonNotes = await notes.json();
   if (window.location.pathname === '/notes') {
-    noteList.forEach((el) => (el.innerHTML = ''));
+    noteList.forEach((el) => (el.innerHTML = ""));
   }
 
   let noteListItems = [];
@@ -192,3 +194,5 @@ if (window.location.pathname === '/notes') {
 }
 
 getAndRenderNotes();
+
+//module.exports = getAndRenderNotes;
