@@ -10,7 +10,7 @@ const app = express();
 //import fs module to read/convert file to js 
 const fs = require('fs');
 // Specify on which port the Express.js server will run
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 // Static middleware pointing to the public folder
 app.use(express.static('public'));
 // Middleware parsing incoming JSON data and assigning it a variable called req.body
@@ -93,6 +93,7 @@ app.delete('/api/notes/:id', (req, res) => {
     });
 });
 
+app.get("*", (req, res) => { res.sendFile(path.join(__dirname, "public/index.html")) });
 
 // listen() method is responsible for listening for incoming connections on the specified port 
 app.listen(PORT, () =>
