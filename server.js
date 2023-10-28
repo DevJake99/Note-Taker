@@ -13,6 +13,7 @@ const fs = require('fs');
 const PORT = 3001;
 // Static middleware pointing to the public folder
 app.use(express.static('public'));
+// Middleware parsing incoming JSON data and assigning it a variable called req.body
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -68,6 +69,29 @@ app.post('/api/notes', (req, res) => {
     });
 });
 
+
+app.delete('/api/notes/:id', (req, res) => {
+    const noteId = req.params.id;
+
+    fs.readFile('db/db.json', 'UTF-8', (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('An error occurred while reading the database file');
+        } else {
+            let notes = JSON.parse(data);
+            notes = notes.filter(note => note.id !== noteId);
+
+            fs.writeFile('./db/db.json', JSON.stringify(notes), (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500).send('An error occurred while writing to the database file');
+                } else {
+                    res.json({ message: `Note with id ${noteId} has been deleted` });
+                }
+            });
+        }
+    });
+});
 
 
 // listen() method is responsible for listening for incoming connections on the specified port 
